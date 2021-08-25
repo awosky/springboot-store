@@ -1,5 +1,6 @@
 package com.learn.store.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -12,9 +13,9 @@ import java.util.Set;
 @Entity
 public class Item {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "item_id")
-    private Integer itemId;
+    private Long itemId;
 
     private String name;
 
@@ -24,11 +25,15 @@ public class Item {
 
     private Date updatedAt;
 
-    public Integer getId() {
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "item")
+    @JsonIgnoreProperties("item")
+    private Set<ItemColor> itemColors;
+
+    public Long getItemId() {
         return itemId;
     }
 
-    public void setId(Integer itemId) {
+    public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
 
@@ -62,5 +67,13 @@ public class Item {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Set<ItemColor> getItemColors() {
+        return itemColors;
+    }
+
+    public void setItemColors(Set<ItemColor> itemColors) {
+        this.itemColors = itemColors;
     }
 }
